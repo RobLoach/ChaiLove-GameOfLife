@@ -1,0 +1,98 @@
+global world = []
+global blockSize = 5
+global boardSize = 40
+global gameTick = 0.1f
+global gameTickTime = 0.1f
+
+def conf(t) {
+	t.window.width = blockSize * boardSize
+	t.window.height = blockSize * boardSize
+}
+
+def newWorld(fill) {
+	var output = []
+	for (var x = 0; x < boardSize; ++x) {
+		// Make a new column.
+		output.push_back([])
+		// Add each cell.
+		for (var y = 0; y < boardSize; ++y) {
+			if (fill) {
+				var rand = love.math.random(100)
+				output[x].push_back((rand > 80) ? true : false)
+			}
+			else {
+				output[x].push_back(false)
+			}
+		}
+	}
+	return output
+}
+
+def load() {
+	world = newWorld(true)
+}
+
+def draw() {
+	graphics.setColor(255, 255, 255)
+	for (var x = 0; x < boardSize; ++x) {
+		for (var y = 0; y < boardSize; ++y) {
+			if (world[x][y]) {
+				love.graphics.rectangle("fill", x * blockSize, y * blockSize, blockSize, blockSize)
+			}
+		}
+	}
+}
+
+def countNeighbors(x, y) {
+	var neighbors = 0
+	for (var i = -1; i <= 1; ++i) {
+		for (var j = -1; j <= 1; ++j) {
+			if (i == 0 && j == 0) {
+				continue
+			}
+			if ((x + i < 0) || (y + j < 0)) {
+				continue
+			}
+			if ((x + i >= boardSize) || (y + j >= boardSize)) {
+				continue
+			}
+			if (world[x + i][y + j]) {
+				++neighbors
+			}
+		}
+	}
+	return neighbors
+}
+
+def update(delta) {
+	gameTick = gameTick - delta
+	if (gameTick > 0) {
+		return
+	}
+
+	gameTick = gameTickTime
+	var newStateWorld = newWorld(false)
+	for (var x = 0; x < boardSize; ++x) {
+		for (var y = 0; y < boardSize; ++y) {
+			var neighbors = countNeighbors(x, y)
+			if (world[x][y]) {
+				if (neighbors < 2) {
+					newStateWorld[x][y] = false
+				}
+				if (neighbors == 2 || neighbors == 3) {
+					newStateWorld[x][y] = true
+				}
+				if (neighbors > 3) {
+					newStateWorld[x][y] = false
+				}
+			}
+			else {
+				if (neighbors == 3) {
+					newStateWorld[x][y] = true
+				}
+			}
+		}
+	}
+
+	world = newStateWorld
+}
