@@ -33,7 +33,7 @@ def load() {
 }
 
 def draw() {
-	graphics.setColor(255, 255, 255)
+	love.graphics.setColor(255, 255, 255)
 	for (var x = 0; x < boardSize; ++x) {
 		for (var y = 0; y < boardSize; ++y) {
 			if (world[x][y]) {
