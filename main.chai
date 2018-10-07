@@ -8,6 +8,7 @@ def conf(t) {
 	t.window.width = blockSize * boardSize
 	t.window.height = blockSize * boardSize
 	t.version = "0.17.0"
+	t.console = true
 }
 
 def newWorld(fill) {
