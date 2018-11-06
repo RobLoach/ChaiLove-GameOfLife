@@ -1,8 +1,8 @@
-global world = []
+global world
 global blockSize = 5
 global boardSize = 40
-global gameTick = 0.1f
-global gameTickTime = 0.1f
+global gameTick = 0.2f
+global gameTickTime = gameTick
 
 def conf(t) {
 	t.window.width = blockSize * boardSize
@@ -31,7 +31,7 @@ def newWorld(fill) {
 }
 
 def load() {
-	world = newWorld(true)
+	world := newWorld(true)
 }
 
 def draw() {
@@ -73,7 +73,7 @@ def update(delta) {
 	}
 
 	gameTick = gameTickTime
-	var newStateWorld = newWorld(false)
+	var newStateWorld := newWorld(false)
 	for (var x = 0; x < boardSize; ++x) {
 		for (var y = 0; y < boardSize; ++y) {
 			var neighbors = countNeighbors(x, y)
@@ -96,5 +96,5 @@ def update(delta) {
 		}
 	}
 
-	world = newStateWorld
+	world := newStateWorld
 }
